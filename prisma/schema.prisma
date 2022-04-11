@@ -1,0 +1,31 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Bracket {
+  id               String    @id @default(cuid())
+  name             String
+  organizerAddress String
+  address          String    @unique
+  entranceFee      Int
+  slug             String
+  entrants         Entrant[]
+  started          Boolean   @default(false)
+  finished         Boolean   @default(false)
+}
+
+model Entrant {
+  id             String   @id @default(cuid())
+  name           String
+
+  bracket        Bracket? @relation(fields: [bracketAddress], references: [id])
+  bracketAddress String?
+}
